@@ -1,224 +1,317 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alvan Hanani - Backend Developer</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- React & Babel -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
     <style>
+        :root {
+            --mouse-x: 50%;
+            --mouse-y: 50%;
+        }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc; /* slate-50 */
+            background-color: #0f172a; /* slate-900 */
+            color: #94a3b8; /* slate-400 */
         }
-        .section-title {
-            @apply text-4xl font-bold text-slate-800 mb-12 text-center;
+        /* Spotlight Cursor Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(
+                600px circle at var(--mouse-x) var(--mouse-y),
+                rgba(29, 78, 216, 0.15),
+                transparent 80%
+            );
+            transition: background 0.2s ease-out;
         }
-        .text-gradient {
-            background-image: linear-gradient(to right, #334155, #0f172a);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-
-        /* Animation Styles */
-        .animated-section {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
         }
-        .animated-section.is-visible {
-            opacity: 1;
-            transform: translateY(0);
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
         }
-
-        .project-card {
-             @apply bg-white/60 backdrop-blur-sm border border-slate-200/80 rounded-xl shadow-sm overflow-hidden transition-all duration-300;
-        }
-
-        .project-card:hover {
-            @apply shadow-xl -translate-y-2 border-slate-200;
-        }
-
-        .glass-card {
-             @apply bg-white/60 backdrop-blur-lg border border-slate-200/80 rounded-xl shadow-sm;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
         }
     </style>
 </head>
-<body class="text-slate-700">
+<body>
 
-    <!-- Header -->
-    <header class="bg-white/70 backdrop-blur-lg sticky top-0 z-50 border-b border-slate-200/80">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-xl font-bold text-slate-900 tracking-tight">Alvan Hanani.</a>
-            <div class="hidden md:flex space-x-8 font-medium">
-                <a href="#projects" class="hover:text-slate-900 transition-colors">Projects</a>
-                <a href="#skills" class="hover:text-slate-900 transition-colors">Skills</a>
-                <a href="#experience" class="hover:text-slate-900 transition-colors">Experience</a>
-                <a href="#contact" class="hover:text-slate-900 transition-colors">Contact</a>
-            </div>
-            <div class="md:hidden">
-                <!-- Mobile menu button can be added here -->
-            </div>
-        </nav>
-    </header>
+    <div id="root"></div>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-6">
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
 
-        <!-- Hero Section -->
-        <section id="home" class="text-center py-24 md:py-32">
-            <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 mb-4 tracking-tight">Alvan Hanani</h1>
-            <p class="text-2xl md:text-3xl text-gradient font-semibold mb-8">Backend Developer</p>
-            <p class="max-w-3xl mx-auto mb-10 text-lg leading-relaxed">
-                A dedicated Website Developer with over four years of experience in developing and maintaining enterprise-scale web applications. Deep expertise in both microservices and monolithic architectures.
-            </p>
-            <div class="flex justify-center items-center space-x-4">
-                <a href="mailto:vanhanid@gmail.com" class="bg-slate-800 text-white font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-slate-900 transition-all hover:scale-105">
-                    Contact Me
-                </a>
-                <a href="#" class="text-slate-800 font-semibold px-8 py-3 rounded-lg hover:bg-slate-200 transition-colors">
-                    View GitHub
-                </a>
-            </div>
-        </section>
+        const App = () => {
+            const [activeSection, setActiveSection] = useState('about');
+            
+            // Mouse move effect
+            useEffect(() => {
+                const handleMouseMove = (e) => {
+                    document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+                    document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+                };
+                window.addEventListener('mousemove', handleMouseMove);
+                return () => window.removeEventListener('mousemove', handleMouseMove);
+            }, []);
 
-        <!-- Projects Section -->
-        <section id="projects" class="py-24 animated-section">
-            <h2 class="section-title">Featured Projects</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-                <!-- Project Card 1: AyoPramuka -->
-                <div class="project-card">
-                    <img src="https://placehold.co/600x400/1e293b/ffffff?text=AyoPramuka" alt="AyoPramuka project interface" class="w-full h-56 object-cover">
-                    <div class="p-8">
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">AyoPramuka Kwarnas</h3>
-                        <p class="mb-5">The official digital education platform for the Indonesian Scout Movement, supporting over 10 million users.</p>
-                        <div class="mb-5 flex flex-wrap gap-2">
-                            <span class="inline-block bg-slate-200/70 text-slate-800 text-sm font-medium px-3 py-1 rounded-full">NestJS</span>
-                            <span class="inline-block bg-slate-200/70 text-slate-800 text-sm font-medium px-3 py-1 rounded-full">Laravel</span>
-                            <span class="inline-block bg-slate-200/70 text-slate-800 text-sm font-medium px-3 py-1 rounded-full">Microservices</span>
-                        </div>
-                        <a href="https://play.google.com/store/apps/details?id=id.pramuka.ayosatu.app" target="_blank" class="font-semibold text-slate-800 hover:text-black">View Details &rarr;</a>
-                    </div>
-                </div>
-
-                <!-- Project Card 2: Spectrum -->
-                <div class="project-card">
-                    <img src="https://placehold.co/600x400/1e293b/ffffff?text=Spectrum" alt="Spectrum project interface" class="w-full h-56 object-cover">
-                    <div class="p-8">
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">Spectrum Insurance Service</h3>
-                        <p class="mb-5">A high-throughput insurance claim service with an API capable of processing over 1,000 transactions per second.</p>
-                        <div class="mb-5 flex flex-wrap gap-2">
-                            <span class="inline-block bg-slate-200/70 text-slate-800 text-sm font-medium px-3 py-1 rounded-full">NestJS</span>
-                            <span class="inline-block bg-slate-200/70 text-slate-800 text-sm font-medium px-3 py-1 rounded-full">Laravel</span>
-                            <span class="inline-block bg-slate-200/70 text-slate-800 text-sm font-medium px-3 py-1 rounded-full">Xendit</span>
-                        </div>
-                        <a href="#" class="font-semibold text-slate-500 cursor-not-allowed">Internal Project</a>
-                    </div>
-                </div>
-
-                <!-- Project Card 3: LINTAS EBTKE -->
-                <div class="project-card">
-                    <img src="https://placehold.co/600x400/1e293b/ffffff?text=LINTAS+EBTKE" alt="LINTAS EBTKE project interface" class="w-full h-56 object-cover">
-                    <div class="p-8">
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">LINTAS EBTKE - Gov Public Portal</h3>
-                        <p class="mb-5">A public information portal for Indonesia's Directorate General of Renewable Energy, developed as a freelance project.</p>
-                        <div class="mb-5 flex flex-wrap gap-2">
-                            <span class="inline-block bg-slate-200/70 text-slate-800 text-sm font-medium px-3 py-1 rounded-full">Laravel</span>
-                            <span class="inline-block bg-slate-200/70 text-slate-800 text-sm font-medium px-3 py-1 rounded-full">Vue.js</span>
-                            <span class="inline-block bg-slate-200/70 text-slate-800 text-sm font-medium px-3 py-1 rounded-full">Data Visualization</span>
-                        </div>
-                        <a href="https://ebtke.esdm.go.id/lintas/id" target="_blank" class="font-semibold text-slate-800 hover:text-black">View Live Site &rarr;</a>
-                    </div>
-                </div>
-
-                <!-- Project Card 4: Momentic -->
-                <div class="project-card">
-                     <img src="https://placehold.co/600x400/1e293b/ffffff?text=Momentic" alt="Momentic project interface" class="w-full h-56 object-cover">
-                    <div class="p-8">
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">Momentic</h3>
-                        <p class="mb-5">A web app that generates insurance products with highly customizable fields to suit client needs.</p>
-                        <div class="mb-5 flex flex-wrap gap-2">
-                            <span class="inline-block bg-slate-200/70 text-slate-800 text-sm font-medium px-3 py-1 rounded-full">Laravel</span>
-                            <span class="inline-block bg-slate-200/70 text-slate-800 text-sm font-medium px-3 py-1 rounded-full">Bootstrap 5</span>
-                        </div>
-                        <a href="#" class="font-semibold text-slate-500 cursor-not-allowed">Internal Project</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Skills Section -->
-        <section id="skills" class="py-24 animated-section">
-             <h2 class="section-title">Technical Skills</h2>
-            <div class="max-w-5xl mx-auto glass-card p-8 md:p-12">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                    <div class="space-y-2"><h3 class="text-lg font-bold text-slate-800">Backend</h3><p>NestJS, Laravel, Golang, Node.js, PHP</p></div>
-                    <div class="space-y-2"><h3 class="text-lg font-bold text-slate-800">Databases</h3><p>MySQL, PostgreSQL, MongoDB, Redis, Kafka</p></div>
-                    <div class="space-y-2"><h3 class="text-lg font-bold text-slate-800">Frontend</h3><p>Vue.js, JavaScript, TypeScript, HTML5, CSS3</p></div>
-                    <div class="space-y-2"><h3 class="text-lg font-bold text-slate-800">Tools</h3><p>Git, Docker, Nginx, Xendit & Midtrans API</p></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Experience Section -->
-        <section id="experience" class="py-24 animated-section">
-            <h2 class="section-title">Work Experience</h2>
-            <div class="max-w-3xl mx-auto">
-                <div class="relative border-l-2 border-slate-200 pl-10 space-y-12">
-                     <!-- Experience Item 1 -->
-                    <div class="relative">
-                        <div class="absolute -left-[45px] top-1.5 h-5 w-5 rounded-full bg-slate-800 border-4 border-slate-50"></div>
-                        <p class="text-sm font-medium text-slate-500">Aug 2024 - Sep 2025</p>
-                        <h3 class="text-xl font-bold text-slate-800 mt-1">Backend Developer</h3>
-                        <p class="text-slate-600">PT Rahadyan Integrasi Nusantara</p>
-                    </div>
-                     <!-- Experience Item 2 -->
-                    <div class="relative">
-                        <div class="absolute -left-[45px] top-1.5 h-5 w-5 rounded-full bg-slate-800 border-4 border-slate-50"></div>
-                         <p class="text-sm font-medium text-slate-500">Jul 2021 - Jul 2024</p>
-                        <h3 class="text-xl font-bold text-slate-800 mt-1">Full-Stack Developer</h3>
-                        <p class="text-slate-600">PT Salvus Inti</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-    
-    <!-- Footer -->
-    <footer id="contact" class="bg-slate-900 text-slate-300">
-        <div class="container mx-auto px-6 py-16 text-center">
-            <h2 class="text-3xl font-bold text-white mb-4">Interested in Collaborating?</h2>
-            <p class="max-w-lg mx-auto mb-8">I'm always open to discussing new projects, creative ideas, or opportunities to be part of an ambitious vision.</p>
-            <a href="mailto:vanhanid@gmail.com" class="bg-white text-slate-900 font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-slate-200 transition-all hover:scale-105 inline-block">
-                Send an Email
-            </a>
-            <div class="mt-12 text-sm text-slate-400">
-                <p>&copy; 2025 Alvan Hanani. Crafted with ❤️ in Bandung.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
+            // Data
+            const portfolioData = {
+                name: "Alvan Hanani",
+                title: "Backend Developer",
+                summary: "I build robust, scalable, and efficient backend solutions for enterprise-level web applications.",
+                about: "With over four years in Insurtech, e-commerce, and EdTech, I specialize in architecting complex systems using both microservices (NestJS) and monolithic (Laravel) approaches. My focus is on performance optimization, seamless API integrations with services like Xendit and Midtrans, and delivering reliable technology that drives business growth.",
+                skills: [
+                    { name: "NestJS", level: "Advanced" },
+                    { name: "Laravel", level: "Advanced" },
+                    { name: "Go (Golang)", level: "Intermediate" },
+                    { name: "Node.js", level: "Advanced" },
+                    { name: "Microservices", level: "Advanced" },
+                    { name: "Vue.js", level: "Intermediate" },
+                    { name: "MySQL", level: "Advanced" },
+                    { name: "PostgreSQL", level: "Advanced" },
+                    { name: "MongoDB", level: "Intermediate" },
+                    { name: "Redis", level: "Intermediate" },
+                    { name: "Kafka", level: "Beginner" },
+                    { name: "Docker", level: "Intermediate" },
+                    { name: "Git", level: "Advanced" },
+                    { name: "Nginx", level: "Intermediate" }
+                ],
+                experiences: [
+                    {
+                        date: "2024 — 2025",
+                        title: "Backend Developer",
+                        company: "PT Rahadyan Integrasi Nusantara",
+                        description: "Led the backend architecture and implementation for AyoPramuka, the national digital platform for the Indonesian Scout Movement, serving millions of users.",
+                        tags: ["NestJS", "Laravel", "Microservices", "REST API"]
+                    },
+                    {
+                        date: "2021 — 2024",
+                        title: "Full-Stack Developer",
+                        company: "PT Salvus Inti",
+                        description: "Developed a suite of enterprise applications for the Insurtech sector, focusing on high-throughput data management and business process automation.",
+                        tags: ["Laravel", "Vue.js", "Xendit API", "Midtrans API"]
                     }
-                });
-            }, {
-                threshold: 0.1 // Trigger when 10% of the element is visible
-            });
+                ],
+                projects: [
+                     {
+                        title: "AyoPramuka Kwarnas",
+                        description: "The official digital education platform for the Indonesian Scout Movement, engineered to support over 10 million active users nationwide.",
+                        tags: ["NestJS", "Laravel", "Microservices", "High Traffic"],
+                        link: "https://play.google.com/store/apps/details?id=id.pramuka.ayosatu.app"
+                    },
+                    {
+                        title: "Spectrum Insurance Service",
+                        description: "A high-throughput insurance claim service with an API architected to process over 1,000 transactions per second.",
+                        tags: ["NestJS", "API Design", "Performance", "Insurtech"],
+                        link: null
+                    },
+                    {
+                        title: "LINTAS EBTKE - Gov Portal",
+                        description: "A public information portal for Indonesia's Directorate General of Renewable Energy, developed as a freelance project.",
+                        tags: ["Laravel", "Vue.js", "Data Visualization", "GovTech"],
+                        link: "https://ebtke.esdm.go.id/lintas/id"
+                    },
+                     {
+                        title: "Momentic",
+                        description: "A dynamic web application that generates insurance products with highly customizable fields to meet diverse client requirements.",
+                        tags: ["Laravel", "Bootstrap", "Custom Fields", "Insurtech"],
+                        link: null
+                    }
+                ]
+            };
 
-            const animatedElements = document.querySelectorAll('.animated-section');
-            animatedElements.forEach(el => observer.observe(el));
-        });
+            return (
+                <div className="mx-auto min-h-screen max-w-screen-xl px-6 py-12 font-sans md:px-12 md:py-20 lg:px-24 lg:py-0">
+                    <div className="lg:flex lg:justify-between lg:gap-4">
+                        <LeftPanel name={portfolioData.name} title={portfolioData.title} summary={portfolioData.summary} activeSection={activeSection} />
+                        <RightPanel about={portfolioData.about} skills={portfolioData.skills} experiences={portfolioData.experiences} projects={portfolioData.projects} setActiveSection={setActiveSection} />
+                    </div>
+                </div>
+            );
+        };
+
+        const LeftPanel = ({ name, title, summary, activeSection }) => {
+            const navItems = [
+                { id: 'about', label: 'About' },
+                { id: 'skills', label: 'Skills' },
+                { id: 'experience', label: 'Experience' },
+                { id: 'projects', label: 'Projects' }
+            ];
+
+            return (
+                <header className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24">
+                    <div>
+                        <h1 className="text-4xl font-bold tracking-tight text-slate-200 sm:text-5xl">{name}</h1>
+                        <h2 className="mt-3 text-lg font-medium tracking-tight text-slate-200 sm:text-xl">{title}</h2>
+                        <p className="mt-4 max-w-xs leading-normal">{summary}</p>
+                        <nav className="nav hidden lg:block" aria-label="In-page navigation">
+                            <ul className="mt-16 w-max">
+                                {navItems.map(item => (
+                                    <li key={item.id}>
+                                        <a className="group flex items-center py-3" href={`#${item.id}`}>
+                                            <span className={`nav-indicator mr-4 h-px w-8 bg-slate-600 transition-all group-hover:w-16 group-hover:bg-slate-200 ${activeSection === item.id ? 'w-16 bg-slate-200' : ''}`}></span>
+                                            <span className={`nav-text text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-200 ${activeSection === item.id ? 'text-slate-200' : ''}`}>{item.label}</span>
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    </div>
+                     <ul className="ml-1 mt-8 flex items-center" aria-label="Social media">
+                        <li className="mr-5 text-xs shrink-0"><a className="block hover:text-slate-200" href="https://github.com/alvanhan" target="_blank" rel="noreferrer noopener"><span className="sr-only">GitHub</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-6 w-6" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a></li>
+                        <li className="mr-5 text-xs shrink-0"><a className="block hover:text-slate-200" href="https://www.linkedin.com/in/alvan-hanani/" target="_blank" rel="noreferrer noopener"><span className="sr-only">LinkedIn</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6" aria-hidden="true"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.25 6.5 1.75 1.75 0 016.5 8.25zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path></svg></a></li>
+                        <li className="mr-5 text-xs shrink-0"><a className="block hover:text-slate-200" href="mailto:vanhanid@gmail.com"><span className="sr-only">Email</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6" aria-hidden="true"><path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z"></path><path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z"></path></svg></a></li>
+                        <li className="mr-5 text-xs shrink-0"><a className="block hover:text-slate-200" href="tel:+6285155151576"><span className="sr-only">Phone</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-6 w-6" aria-hidden="true"><path fillRule="evenodd" d="M2 3.5A1.5 1.5 0 013.5 2h1.148a1.5 1.5 0 011.465 1.175l.716 3.223a1.5 1.5 0 01-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 006.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 011.767-1.052l3.223.716A1.5 1.5 0 0118 15.352V16.5a1.5 1.5 0 01-1.5 1.5h-1.528a1.5 1.5 0 01-1.491-.961l-.528-1.585a1.5 1.5 0 00-1.451-1.055l-1.059.084a1.5 1.5 0 01-1.422-.994l-.53-1.589a1.5 1.5 0 00-1.45-1.056l-1.058.084a1.5 1.5 0 01-1.423-.994l-.529-1.589a1.5 1.5 0 00-1.45-1.055l-1.06.084a1.5 1.5 0 01-1.422-.994l-.529-1.585A1.5 1.5 0 012.028 3.5H2z" clipRule="evenodd"></path></svg></a></li>
+                    </ul>
+                </header>
+            );
+        };
+
+        const RightPanel = ({ about, skills, experiences, projects, setActiveSection }) => {
+            const aboutRef = useRef(null);
+            const skillsRef = useRef(null);
+            const experienceRef = useRef(null);
+            const projectsRef = useRef(null);
+
+            useEffect(() => {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                setActiveSection(entry.target.id);
+                            }
+                        });
+                    },
+                    { rootMargin: '-30% 0px -70% 0px' } 
+                );
+                
+                const sections = [aboutRef, skillsRef, experienceRef, projectsRef];
+                sections.forEach(ref => {
+                    if (ref.current) observer.observe(ref.current);
+                });
+
+                return () => sections.forEach(ref => {
+                    if (ref.current) observer.unobserve(ref.current);
+                });
+
+            }, []);
+
+            return (
+                <main className="pt-24 lg:w-1/2 lg:py-24">
+                    <section id="about" ref={aboutRef} className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24" aria-label="About me">
+                        <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-slate-900/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+                            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-200 lg:sr-only">About</h2>
+                        </div>
+                        <div><p className="mb-4">{about}</p></div>
+                    </section>
+
+                    <section id="skills" ref={skillsRef} className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24" aria-label="Skills">
+                         <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-slate-900/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+                            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-200 lg:sr-only">Skills</h2>
+                        </div>
+                        <div>
+                            <ul className="flex flex-wrap">
+                                {skills.map((skill, i) => (
+                                    <li key={i} className="mr-1.5 mt-2">
+                                        <div className="flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-xs font-medium leading-5 text-teal-300 ">
+                                            {skill.name}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </section>
+                    
+                    <section id="experience" ref={experienceRef} className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24" aria-label="Work experience">
+                         <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-slate-900/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+                            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-200 lg:sr-only">Experience</h2>
+                        </div>
+                        <div>
+                            <ol className="group/list">
+                                {experiences.map((exp, i) => (
+                                    <li key={i} className="mb-12">
+                                        <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
+                                            <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-slate-800/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
+                                            <header className="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:col-span-2">{exp.date}</header>
+                                            <div className="z-10 sm:col-span-6">
+                                                <h3 className="font-medium leading-snug text-slate-200">
+                                                    <div><span className="inline-block font-bold">{exp.title} · {exp.company}</span></div>
+                                                </h3>
+                                                <p className="mt-2 text-sm leading-normal">{exp.description}</p>
+                                                <ul className="mt-2 flex flex-wrap" aria-label="Technologies used">
+                                                    {exp.tags.map(tag => <li key={tag} className="mr-1.5 mt-2"><div className="flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-xs font-medium leading-5 text-teal-300">{tag}</div></li>)}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
+                    </section>
+
+                     <section id="projects" ref={projectsRef} className="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24" aria-label="Selected projects">
+                        <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-slate-900/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+                            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-200 lg:sr-only">Projects</h2>
+                        </div>
+                        <div>
+                            <ul className="group/list">
+                                {projects.map((proj, i) => (
+                                    <li key={i} className="mb-12">
+                                         <div className="group relative grid gap-4 pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
+                                            <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-slate-800/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"></div>
+                                            <div className="z-10 sm:order-2 sm:col-span-6">
+                                                <h3 className="font-medium leading-snug text-slate-200">
+                                                    <a className="inline-flex items-baseline font-medium leading-tight text-slate-200 hover:text-teal-300 focus-visible:text-teal-300 group/link text-base" href={proj.link || '#'} target={proj.link ? "_blank" : "_self"} rel="noreferrer noopener" aria-label={`${proj.title} (opens in a new tab)`}>
+                                                        <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block"></span>
+                                                        <span>{proj.title} {proj.link && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="inline-block h-4 w-4 shrink-0 transition-transform group-hover/link:-translate-y-1 group-hover/link:translate-x-1 group-focus-visible/link:-translate-y-1 group-focus-visible/link:translate-x-1 motion-reduce:transition-none ml-1 translate-y-px" aria-hidden="true"><path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd"></path></svg>}</span>
+                                                    </a>
+                                                </h3>
+                                                <p className="mt-2 text-sm leading-normal">{proj.description}</p>
+                                                <ul className="mt-2 flex flex-wrap" aria-label="Technologies used">
+                                                    {proj.tags.map(tag => <li key={tag} className="mr-1.5 mt-2"><div className="flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-xs font-medium leading-5 text-teal-300">{tag}</div></li>)}
+                                                </ul>
+                                            </div>
+                                            {/* Image placeholder can go here */}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </section>
+                </main>
+            );
+        };
+        
+        ReactDOM.render(<App />, document.getElementById('root'));
+
     </script>
 
 </body>
 </html>
-
 
